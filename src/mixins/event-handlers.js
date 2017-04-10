@@ -181,7 +181,13 @@ var EventHandlers = {
 
     return indexes;
   },
-  checkNavigable(index) {
+  checkNavigable(index, direction) {
+
+    if(this.props.validationList && this.props.validationList[index] && direction === 'left' &&
+      !this.props.validationList[index]()) {
+      return index - 1;
+    }
+
     const navigables = this.getNavigableIndexes();
     let prevNavigable = 0;
 
@@ -270,14 +276,14 @@ var EventHandlers = {
         case 'left':
         case 'down':
           newSlide = this.state.currentSlide + this.getSlideCount();
-          slideCount = this.props.swipeToSlide ? this.checkNavigable(newSlide) : newSlide;
+          slideCount = this.props.swipeToSlide ? this.checkNavigable(newSlide, 'left') : newSlide;
           this.state.currentDirection = 0;
           break;
 
         case 'right':
         case 'up':
           newSlide = this.state.currentSlide - this.getSlideCount();
-          slideCount = this.props.swipeToSlide ? this.checkNavigable(newSlide) : newSlide;
+          slideCount = this.props.swipeToSlide ? this.checkNavigable(newSlide, 'right') : newSlide;
           this.state.currentDirection = 1;
           break;
 
